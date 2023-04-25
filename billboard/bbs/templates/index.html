@@ -1,0 +1,45 @@
+{% extends 'defaultwm.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+<br>
+    <div class="dropdown-menu show">
+        {% for nm in categories %}
+        <a class="dropdown-item" href="/category/{{ nm.name }}/"><b>{{ nm.namerus }}</b></a>
+        {% endfor %}
+    </div>
+{% endblock title %}
+
+<hr>
+
+{% block content %}
+<br>
+{% if perms.bbs.add_post %}
+<div style="display: inline-block; margin: 0;">
+    <nav class="navbar navbar-expand-lg static-top">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/bbs/create/"><b>Create Post</b></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<hr>
+{% endif %}
+<h6>5 last posts in all categories:</h6>
+{% for new in bbs %}
+<br>
+<h2 class="mark">{{ new.title }}</h2>
+<h6 class="small"><i>{{ new.datethis }}; Author: {{ new.author.authorUser.username }}</i></h6>
+<h6>Category: {{ new.catname }}</h6>
+<h6>{{ new.id }}</h6>
+
+<h5><a href="{{ new.get_absolute_url }}">{{ new.text|truncatechars:30 }} </a></h5>
+<p class="small">Comments: {{ new.comm_count }}</p>
+<br>
+{% endfor %}
+
+
+
+{% endblock content %}

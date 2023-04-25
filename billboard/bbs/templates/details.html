@@ -1,0 +1,53 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% load cache %}
+    {% cache 300 content %}
+
+{% block content %}
+{% if perms.bbs.change_post or perms.bbs.delete_post %}
+           <div style="display: inline-block; margin: 0;">
+                <nav class="navbar navbar-expand-lg static-top">
+                   <ul class="navbar-nav ml-auto">
+                       <li class="nav-item">
+                           <a class="nav-link" href="{% url 'post_edit' pk=new.id %}"><b>Edit Post</b></a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{% url 'post_delete' pk=new.id %}"><b>Delete Post</b></a>
+                       </li>
+                   </ul>
+               </nav>
+           </div>
+{% endif %}
+<br>
+<h6>POST: id={{ new.id }}</h6>
+
+<h2 class="mark">{{ new.title }}</h2>
+<p><i>Category: {{ new.catname }}</i></p>
+<p><i>Author: {{ new.author.authorUser.username }} </i></p>
+<p class="lead">{{ new.text }}</p>
+<p>{{ new.dateCreation|date:'d-m-Y' }}</p>
+
+<p><b>C o m m e n t s:  {{ new.comm_count }}</b></p>
+{% for comment in post_comments %}
+
+<p class="inline-block"><b>{{ comment.text }} - </b>
+    <i> Author: {{ comment.commentUser.username }};
+        {{ comment.dateCreation|date:'d-m-Y' }}.
+        {{ comment.like_ }}</i>
+    {% if perms.bbs.change_comment and perms.bbs.delete_comment %}
+    <a class="inline-block" href="{% url 'comment_edit' id1=new.id id2=comment.id %}">
+        <mark>Edit</mark></a> or
+    <a class="inline-block" href="{% url 'comment_delete' id1=new.id id2=comment.id %}">
+        <mark>Delete</mark></a>
+{% endif %}
+</p>
+{% endfor %}
+
+{% if perms.bbs.add_comment %}
+<b><a class="nav-item nav-link" href='{{ new.get_absolute_url }}comment_create/'>Add comment</a></b>
+{% endif %}
+
+{% endblock content %}
+{% endcache %}

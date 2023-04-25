@@ -1,0 +1,22 @@
+{% extends 'default.html' %}
+
+
+{% block content %}
+<br>
+<h6>Edit Comment to "{{ new.categoryType }}" id={{ new.id }}</h6>
+<hr>
+<p>Date of Creation : {{ new.datethis }}</p>
+<h2 class="mark">{{ new.title }}</h2>
+<p><i>Author: {{ new.author.authorUser.username }} </i></p>
+<h5>{{ new.text }}</h5>
+<p>Rating: {{ new.rating }} </p>
+<hr>
+<h1>Edit Comment</h1>
+<p>Date of Creation : {{ comment.dateCreation|date:'d-m-Y, h:m:s' }}</p>
+<p><i>Author: {{ comment.commentUser.username }} </i></p>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="mt-3 btn-primary" value="Save" />
+</form>
+{% endblock content %}

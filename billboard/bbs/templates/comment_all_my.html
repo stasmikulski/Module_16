@@ -1,0 +1,23 @@
+{% extends 'default.html' %}
+
+
+{% block content %}
+<br>
+<h1>All my comments:</h1>
+<hr>
+{% for comment in comments %}
+
+<p class="inline-block"><b>{{ comment.text }} - </b>
+    <i> Author: {{ comment.commentUser.username }};
+        {{ comment.dateCreation|date:'d-m-Y' }}.
+        {{ comment.like_ }}</i>
+    {% if perms.bbs.change_comment and perms.bbs.delete_comment %}
+    <a class="inline-block" href="{% url 'comment_edit' id1=comment.commentPost.id id2=comment.id %}">
+        <mark>Edit</mark></a> or
+    <a class="inline-block" href="{% url 'comment_delete' id1=comment.commentPost.id id2=comment.id %}">
+        <mark>Delete</mark></a>
+    {% endif %}
+</p>
+{% endfor %}
+
+{% endblock content %}

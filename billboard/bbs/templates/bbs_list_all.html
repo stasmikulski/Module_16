@@ -1,0 +1,77 @@
+{% extends 'defaultwm.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+{% block title %}
+<br>
+<div class="dropdown-menu show">
+        <a class="dropdown-item" href="/category/Tanks/"><b>Танки</b></a>
+        <a class="dropdown-item" href="/category/Heals/"><b>Хилы</b></a>
+        <a class="dropdown-item" href="/category/Dd/"><b>ДД</b></a>
+        <a class="dropdown-item" href="/category/Tradesman/"><b>Торговцы</b></a>
+        <a class="dropdown-item" href="/category/Guildmaster/"><b>Гилдмастеры</b></a>
+        <a class="dropdown-item" href="/category/Questgiver/"><b>Квестгиверы</b></a>
+        <a class="dropdown-item" href="/category/Smith/"><b>Кузнецы</b></a>
+        <a class="dropdown-item" href="/category/Skinner/"><b>Кожевники</b></a>
+        <a class="dropdown-item" href="/category/Potionmaster/"><b>Зельевары</b></a>
+        <a class="dropdown-item" href="/category/Spellmaster/"><b>Мастера заклинаний</b></a>
+</div>
+{% endblock title %}
+
+{% block content %}
+<br>
+{% if perms.bbs.add_post %}
+<div style="display: inline-block; margin: 0;">
+    <nav class="navbar navbar-expand-lg static-top">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/bbs/create/"><b>Create Post</b></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<hr>
+{% endif %}
+<h1>All posts in all categories:</h1>
+<hr>
+
+{% for new in bbs %}
+<br>
+<h2 class="mark">{{ new.title }}</h2>
+<h6 class="small"><i>{{ new.datethis }}; Author: {{ new.author.authorUser.username }}</i></h6>
+<h6>Category: {{ new.catname }}</h6>
+<h6>{{ new.id }}</h6>
+
+<h5><a href="{{ new.get_absolute_url }}">{{ new.text|truncatechars:30 }} </a></h5>
+<p class="small">Comments: {{ new.comm_count }}</p>
+<br>
+{% endfor %}
+
+   {# Добавляем пагинацию на страницу #}
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+<li class="page-item"><a class="page-link" href="?{% url_replace page=1 %}">1</a></li>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a></li>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+      <li class="page-item page-link-2">{{ page_obj.number }}</li>
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a></li>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a></li>
+       {% endif %}
+   {% endif %}
+
+  </ul>
+</nav>
+
+{% endblock content %}
