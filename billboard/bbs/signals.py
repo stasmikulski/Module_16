@@ -8,16 +8,6 @@ from datetime import datetime, timedelta
 one_week_ago = datetime.today() - timedelta(days=1)
 
 
-@receiver(post_save, sender=Post)
-def post_created(instance, created, **kwargs):
-    if not created:
-        return
-    if created:
-        print('Post CREATED:', instance.categoryType)
-        print(instance.title)
-        print(instance.dateCreation)
-        print(instance.author)
-
 
 @receiver(post_save, sender=Comment)
 def comment_created(instance, created, **kwargs):
