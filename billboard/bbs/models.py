@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django.core.cache import cache
-from profanity.validators import validate_is_profane
 
 Tanks = 'Tanks'
 Heals = 'Heals'
@@ -51,8 +50,8 @@ class Post(models.Model):
     categoryType = models.CharField(max_length=16, choices=CATEGORY_CHOICES, default=Tanks)
     #postCategory = models.ManyToManyField(Category)
     dateCreation = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=128, validators=[validate_is_profane])
-    text = models.TextField(validators=[validate_is_profane])
+    title = models.CharField(max_length=128)
+    text = models.TextField()
 
     def catname(self):
         return catdictionary[self.categoryType]
@@ -89,7 +88,7 @@ class Post(models.Model):
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)
     commentUser = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField(validators=[validate_is_profane])
+    text = models.TextField()
     dateCreation = models.DateTimeField(auto_now_add=True)
 
     def datethis(self):
